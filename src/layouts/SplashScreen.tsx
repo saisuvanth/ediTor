@@ -3,7 +3,7 @@ import React from 'react'
 
 const SplashScreen = () => {
 	return (
-		<Box color={'black'} alignItems={'center'} justifyContent={'center'}>
+		<Box color={'black'} alignItems={'flex-end'} justifyContent={'flex-end'} height={'100vh'}>
 			<Skeleton animation='wave' width='90vw' height='90vh' variant='rectangular' />
 		</Box>
 	)

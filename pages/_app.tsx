@@ -7,7 +7,7 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
 import theme from '../src/utils/theme';
 import { useEffect, useState } from 'react';
-import SplashScreen from '../src/components/SplashScreen';
+import SplashScreen from '../src/layouts/SplashScreen';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -19,28 +19,25 @@ function MyApp(props: MyAppProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      // setLoading(false);
-    }, 5000);
+    setLoading(false);
   }, [])
 
   const { emotionCache, Component, pageProps } = props
   return (
-    <>
-      {
-        !loading ?
-          <CacheProvider value={emotionCache || clientSideEmotionCache}>
-            <Head>
-              <meta name='viewport' content='initial-scale=1,width=device-width' />
-            </Head>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </CacheProvider>
-          : <SplashScreen />
-      }
-    </>
+
+    <CacheProvider value={emotionCache || clientSideEmotionCache}>
+      <Head>
+        <meta name='viewport' content='initial-scale=1,width=device-width' />
+      </Head>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {
+          loading ? <SplashScreen /> :
+            <Component {...pageProps} />
+        }
+      </ThemeProvider>
+    </CacheProvider>
+
   )
 }
 

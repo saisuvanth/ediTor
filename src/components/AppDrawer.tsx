@@ -16,17 +16,17 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import MailIcon from '@mui/icons-material/Mail';
-import { appDrawer } from '../utils/constants';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { Chip } from '@mui/material';
+import { FileType } from '../utils/constants';
 
 const drawerWidth: number = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
 	width: drawerWidth,
 	transition: theme.transitions.create('width', {
-		easing: theme.transitions.easing.sharp,
+		easing: theme.transitions.easing.easeOut,
 		duration: theme.transitions.duration.enteringScreen,
 	}),
 	overflowX: 'hidden',
@@ -34,7 +34,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
 
 const closedMixin = (theme: Theme): CSSObject => ({
 	transition: theme.transitions.create('width', {
-		easing: theme.transitions.easing.sharp,
+		easing: theme.transitions.easing.easeIn,
 		duration: theme.transitions.duration.leavingScreen,
 	}),
 	overflowX: 'hidden',
@@ -49,7 +49,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 	alignItems: 'center',
 	justifyContent: 'flex-end',
 	padding: theme.spacing(0, 1),
-	// necessary for content to be below app bar
 	...theme.mixins.toolbar,
 }));
 
@@ -95,9 +94,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 interface IAppDrawer {
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>
+	files: Array<FileType>;
+	handleOpen: () => void;
+	selectedFile: any;
+	setSelectedFile: Dispatch<SetStateAction<any>>
 }
 
-export default function AppDrawer({ open, setOpen }: IAppDrawer) {
+export default function AppDrawer({ open, setOpen, files, handleOpen, selectedFile, setSelectedFile }: IAppDrawer) {
 	const theme = useTheme();
 
 	const handleDrawerOpen = () => {
@@ -107,6 +110,11 @@ export default function AppDrawer({ open, setOpen }: IAppDrawer) {
 	const handleDrawerClose = () => {
 		setOpen(false);
 	};
+
+	const handleSelect = (index: any) => {
+		console.log(index);
+		setSelectedFile(index)
+	}
 
 	return (
 		<Box sx={{ display: 'flex' }}>
@@ -127,6 +135,7 @@ export default function AppDrawer({ open, setOpen }: IAppDrawer) {
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="h6" noWrap component="div">
+							EDI<Typography variant='h4' p={0.2} component={'span'}>T</Typography>OR
 						</Typography>
 					</Toolbar>
 				</AppBar>
@@ -137,8 +146,8 @@ export default function AppDrawer({ open, setOpen }: IAppDrawer) {
 				</DrawerHeader>
 				<Divider />
 				<List>
-					{appDrawer.map((app, index) => (
-						<ListItem key={index} disablePadding sx={{ display: 'block' }}>
+					{files?.map((app, index) => (
+						<ListItem key={index} onClick={event => handleSelect(index)} disablePadding sx={{ display: 'block', backgroundColor: index === selectedFile ? 'gray' : '' }}>
 							<ListItemButton
 								sx={{
 									minHeight: 48,
@@ -153,15 +162,36 @@ export default function AppDrawer({ open, setOpen }: IAppDrawer) {
 										justifyContent: 'center',
 									}}
 								>
-									<app.icon />
+									<InsertDriveFileIcon />
 								</ListItemIcon>
 								<ListItemText primary={app.name} sx={{ opacity: open ? 1 : 0 }} />
 							</ListItemButton>
 						</ListItem>
 					))}
+					<Divider />
+					<ListItem disablePadding sx={{ display: 'block' }} onClick={handleOpen}>
+						<ListItemButton
+							sx={{
+								minHeight: 48,
+								justifyContent: open ? 'initial' : 'center',
+								px: 2.5,
+							}}
+						>
+							<ListItemIcon
+								sx={{
+									minWidth: 0,
+									mr: open ? 3 : 'auto',
+									justifyContent: 'center',
+								}}
+							>
+								<NoteAddIcon />
+							</ListItemIcon>
+							<ListItemText sx={{ opacity: open ? 1 : 0 }} />
+						</ListItemButton>
+					</ListItem>
 				</List>
 				<Divider />
 			</Drawer>
-		</Box>
+		</Box >
 	);
 }
