@@ -1,30 +1,26 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useState, FC, Fragment } from 'react'
+import React, { useEffect, useState, FC, Fragment, useContext } from 'react'
 import AppDrawer from '../components/AppDrawer';
 import Editor, { EditorProps } from '@monaco-editor/react';
 import SplashScreen from './SplashScreen';
-import { FileType } from '../utils/constants';
+import { FileType, IHomeActionEnum } from '../utils/constants';
 import useDialog from '../hooks/useDialog';
 import MyDialog from '../components/MyDialog';
+import { HomeContext } from '../contexts/HomeContext';
+import IODrawer from '../components/IODrawer';
 
 const Home: FC = () => {
-	const [files, setFiles] = useState<Array<FileType>>([]);
-	const [lang, setLang] = useState<string>('javascript');
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [selectedFile, setSelectedFile] = useState<number | null>(null);
-	const [code, setCode] = useState<Array<string>>([]);
-	const { open, handleClose, handleOpen } = useDialog();
-
+	const { state: { files, selectedFile, code, lang }, dispatch } = useContext(HomeContext);
 
 	const createNewFile = (filename: string) => {
-		setFiles(prev => [...prev, { name: filename }])
+		dispatch({ type: IHomeActionEnum.ADD_FILE, value: filename });
 	}
 
 
 	useEffect(() => {
 		console.log(selectedFile);
 		if (selectedFile) {
-			setLang(files[selectedFile].name.split('.').pop() as string)
+			dispatch({ type: IHomeActionEnum.SET_LANG, value: files[selectedFile].split('.').pop() as string })
 		}
 	}, [selectedFile, files])
 
@@ -44,11 +40,12 @@ const Home: FC = () => {
 
 	return (
 		<Fragment>
-			<AppDrawer open={isOpen} setOpen={setIsOpen} files={files} handleOpen={handleOpen} selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
-			<Box component="main" sx={{ flexGrow: 1, height: '100vh', mt: '68px', ml: '65px' }}>
+			<AppDrawer />
+			<Box component="main" sx={{ flexGrow: 1, height: '90vh', mt: '68px', ml: '65px' }}>
 				<Editor {...options} />
 			</Box>
-			<MyDialog open={open} handleClose={handleClose} createFile={createNewFile} />
+			<MyDialog createFile={createNewFile} />
+			<IODrawer />
 		</Fragment>
 	)
 }

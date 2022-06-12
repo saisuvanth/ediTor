@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { useContext } from 'react';
 import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -18,8 +18,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import { Chip } from '@mui/material';
-import { FileType } from '../utils/constants';
+import { IHomeActionEnum } from '../utils/constants';
+import { HomeContext } from '../contexts/HomeContext';
+import { Avatar, Button } from '@mui/material';
 
 const drawerWidth: number = 240;
 
@@ -91,36 +92,39 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 	}),
 );
 
-interface IAppDrawer {
-	open: boolean;
-	setOpen: Dispatch<SetStateAction<boolean>>
-	files: Array<FileType>;
-	handleOpen: () => void;
-	selectedFile: any;
-	setSelectedFile: Dispatch<SetStateAction<any>>
-}
-
-export default function AppDrawer({ open, setOpen, files, handleOpen, selectedFile, setSelectedFile }: IAppDrawer) {
+export default function AppDrawer() {
 	const theme = useTheme();
+	const { state: { left, files, selectedFile, right }, dispatch } = useContext(HomeContext);
 
 	const handleDrawerOpen = () => {
-		setOpen(true);
+		dispatch({ type: IHomeActionEnum.SET_LEFT, value: true });
 	}
 
 	const handleDrawerClose = () => {
-		setOpen(false);
+		dispatch({ type: IHomeActionEnum.SET_LEFT, value: false })
 	};
 
 	const handleSelect = (index: any) => {
 		console.log(index);
-		setSelectedFile(index)
+		dispatch({ type: IHomeActionEnum.SET_SEL_FILE, value: index })
+	}
+
+	const handleCompile = () => {
+		dispatch({ type: IHomeActionEnum.SET_RIGHT, value: !right })
+		fetch('/api/signup', {
+			method: 'POST',
+			body: JSON.stringify({ username: 'suvanth', password: 'suvanth@96' })
+		}
+		).then(res => res.json()).then(data => {
+			console.log(data);
+		})
 	}
 
 	return (
 		<Box sx={{ display: 'flex' }}>
 			<CssBaseline />
-			<Drawer variant="permanent" open={open}>
-				<AppBar position="fixed" open={open}>
+			<Drawer variant="permanent" open={left}>
+				<AppBar position="fixed" open={left}>
 					<Toolbar>
 						<IconButton
 							color="inherit"
@@ -129,14 +133,22 @@ export default function AppDrawer({ open, setOpen, files, handleOpen, selectedFi
 							edge="start"
 							sx={{
 								marginRight: 5,
-								...(open && { display: 'none' }),
+								...(left && { display: 'none' }),
 							}}
 						>
 							<MenuIcon />
 						</IconButton>
-						<Typography variant="h6" noWrap component="div">
-							EDI<Typography variant='h4' p={0.2} component={'span'}>T</Typography>OR
+						<Typography variant="h6" noWrap component="div" sx={{ flexGrow: 2 }}>
+							EDI<Typography variant='h4' color={'green'} p={0.2} component={'span'}>T</Typography>OR
 						</Typography>
+						<Box sx={{ marginRight: '10' }}>
+							<Button variant='outlined' color='success' onClick={handleCompile}>
+								Compile
+							</Button>
+							<IconButton sx={{ marginLeft: '2rem' }}>
+								<Avatar />
+							</IconButton>
+						</Box>
 					</Toolbar>
 				</AppBar>
 				<DrawerHeader>
@@ -151,42 +163,42 @@ export default function AppDrawer({ open, setOpen, files, handleOpen, selectedFi
 							<ListItemButton
 								sx={{
 									minHeight: 48,
-									justifyContent: open ? 'initial' : 'center',
+									justifyContent: left ? 'initial' : 'center',
 									px: 2.5,
 								}}
 							>
 								<ListItemIcon
 									sx={{
 										minWidth: 0,
-										mr: open ? 3 : 'auto',
+										mr: left ? 3 : 'auto',
 										justifyContent: 'center',
 									}}
 								>
 									<InsertDriveFileIcon />
 								</ListItemIcon>
-								<ListItemText primary={app.name} sx={{ opacity: open ? 1 : 0 }} />
+								<ListItemText primary={app} sx={{ opacity: left ? 1 : 0 }} />
 							</ListItemButton>
 						</ListItem>
 					))}
 					<Divider />
-					<ListItem disablePadding sx={{ display: 'block' }} onClick={handleOpen}>
+					<ListItem disablePadding sx={{ display: 'block' }} onClick={() => dispatch({ type: IHomeActionEnum.SET_DIALOG, value: true })}>
 						<ListItemButton
 							sx={{
 								minHeight: 48,
-								justifyContent: open ? 'initial' : 'center',
+								justifyContent: left ? 'initial' : 'center',
 								px: 2.5,
 							}}
 						>
 							<ListItemIcon
 								sx={{
 									minWidth: 0,
-									mr: open ? 3 : 'auto',
+									mr: left ? 3 : 'auto',
 									justifyContent: 'center',
 								}}
 							>
 								<NoteAddIcon />
 							</ListItemIcon>
-							<ListItemText sx={{ opacity: open ? 1 : 0 }} />
+							<ListItemText primary={'Add File'} sx={{ opacity: left ? 1 : 0 }} />
 						</ListItemButton>
 					</ListItem>
 				</List>

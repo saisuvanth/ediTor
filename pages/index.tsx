@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Paper } from '@mui/material'
 import MyHome from '../src/layouts/Home'
+import HomeContextProvider from '../src/contexts/HomeContext'
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,9 @@ const Home: NextPage = () => {
         <meta name="description" content="Code editor for editing online" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MyHome />
+      <HomeContextProvider>
+        <MyHome />
+      </HomeContextProvider>
     </Paper>
   )
 }

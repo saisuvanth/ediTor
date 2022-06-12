@@ -1,10 +1,13 @@
 import { Autocomplete, Dialog, Paper, Stack, TextField } from '@mui/material'
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { FileAdd, supportedLang } from '../utils/constants'
+import React, { FC, useContext, useEffect, useRef, useState } from 'react'
+import { HomeContext } from '../contexts/HomeContext';
+import { IHomeActionEnum, supportedLang } from '../utils/constants'
+import { FileAdd } from '../utils/types';
 
 
-const MyDialog: FC<FileAdd> = ({ open, handleClose, createFile }: FileAdd) => {
+const MyDialog: FC<FileAdd> = ({ createFile }: FileAdd) => {
 	const [name, setName] = useState<string>('');
+	const { state: { dialog }, dispatch } = useContext(HomeContext);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
@@ -16,6 +19,10 @@ const MyDialog: FC<FileAdd> = ({ open, handleClose, createFile }: FileAdd) => {
 		}
 	}
 
+	const handleClose = () => {
+		dispatch({ type: IHomeActionEnum.SET_DIALOG, value: false })
+	}
+
 	const onSelectListener = (event: any, newValue: string) => {
 		console.log(name, newValue);
 		createFile(name + '.' + newValue)
@@ -24,7 +31,7 @@ const MyDialog: FC<FileAdd> = ({ open, handleClose, createFile }: FileAdd) => {
 
 
 	return (
-		<Dialog open={open} onClose={handleClose}>
+		<Dialog open={dialog} onClose={handleClose}>
 			<Paper sx={{ p: 4 }}>
 				<Stack direction={'row'} spacing={0}>
 					<TextField id='name' placeholder='index' value={name} onChange={handleChange} onKeyDown={onChangeListener} />
