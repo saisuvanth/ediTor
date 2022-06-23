@@ -8,6 +8,7 @@ import { ThemeProvider } from '@mui/material';
 import theme from '../src/utils/theme';
 import { useEffect, useState } from 'react';
 import SplashScreen from '../src/layouts/SplashScreen';
+import Login from './login';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -16,10 +17,12 @@ interface MyAppProps extends AppProps {
 }
 
 function MyApp(props: MyAppProps) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(false);
+    setIsLogin(localStorage.getItem('login') ? true : false);
   }, [])
 
   const { emotionCache, Component, pageProps } = props
@@ -32,8 +35,10 @@ function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {
-          loading ? <SplashScreen /> :
-            <Component {...pageProps} />
+          // isLogin ?
+          // loading ? <SplashScreen /> :
+          // <Component {...pageProps} /> :
+          <Login />
         }
       </ThemeProvider>
     </CacheProvider>

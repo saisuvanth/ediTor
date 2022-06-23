@@ -38,3 +38,7 @@ export type IHomeAction =
 	| { type: IHomeActionEnum.ADD_FILE, value: string }
 	| { type: IHomeActionEnum.SET_CODE, value: string }
 
+export type IMessage = {
+	type: 'error' | 'info' | null;
+	message: string;
+}

@@ -15,8 +15,11 @@ const theme = createTheme({
 		}
 	},
 	direction: 'ltr',
-	transitions: {
+	components: {
+		MuiTypography: {
+
+		}
 	}
 })
 
-export default theme
+export default theme;

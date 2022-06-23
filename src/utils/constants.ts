@@ -1,7 +1,7 @@
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { Dispatch, SetStateAction } from 'react';
-import { IHomeState } from './types';
+import { IHomeState, IMessage } from './types';
 
 export interface FileType {
 	name: string;
@@ -28,4 +28,8 @@ export const defaultHomeState: IHomeState = {
 	lang: 'javascript'
 }
 
+export const defaultMessage: IMessage = {
+	type: null,
+	message: ''
+}
 export const supportedLang = ['js', 'c', 'cpp', 'py'];
