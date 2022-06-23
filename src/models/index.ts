@@ -1,6 +1,6 @@
 import { connect } from 'mongoose';
 
-connect('mongodb+srv://codeditor:rookie>@cluster0.1t2vy.mongodb.net/?retryWrites=true&w=majority')
+connect(process.env.MONGOURI)
 
 import User from './User';
 
