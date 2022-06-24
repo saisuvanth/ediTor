@@ -1,6 +1,7 @@
 import { connect } from 'mongoose';
 
-connect(process.env.MONGOURI)
+console.log(process.env.MONGOURI);
+connect(process.env.MONGOURI as string)
 
 import User from './User';
 
