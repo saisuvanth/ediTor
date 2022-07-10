@@ -6,9 +6,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material';
 import theme from '../src/utils/theme';
-import { useEffect, useState } from 'react';
-import SplashScreen from '../src/layouts/SplashScreen';
-import Login from './login';
+import AuthContextProvider from 'src/contexts/AuthContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -17,32 +15,23 @@ interface MyAppProps extends AppProps {
 }
 
 function MyApp(props: MyAppProps) {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  useEffect(() => {
-    setLoading(false);
-    setIsLogin(localStorage.getItem('login') ? true : false);
-  }, [])
 
-  const { emotionCache, Component, pageProps } = props
+  const { emotionCache, Component, pageProps: { session, ...pageProps } } = props;
+  console.log(Component)
+  console.log(pageProps);
   return (
-
     <CacheProvider value={emotionCache || clientSideEmotionCache}>
       <Head>
         <meta name='viewport' content='initial-scale=1,width=device-width' />
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {
-          // isLogin ?
-          // loading ? <SplashScreen /> :
-          // <Component {...pageProps} /> :
-          <Login />
-        }
+        <AuthContextProvider>
+          <Component {...pageProps} />
+        </AuthContextProvider>
       </ThemeProvider>
     </CacheProvider>
-
   )
 }
 

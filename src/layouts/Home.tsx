@@ -1,10 +1,9 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useState, FC, Fragment, useContext } from 'react'
+import React, { useEffect, FC, Fragment, useContext } from 'react'
 import AppDrawer from '../components/AppDrawer';
 import Editor, { EditorProps } from '@monaco-editor/react';
 import SplashScreen from './SplashScreen';
-import { FileType, IHomeActionEnum } from '../utils/constants';
-import useDialog from '../hooks/useDialog';
+import { IHomeActionEnum } from '../utils/constants';
 import MyDialog from '../components/MyDialog';
 import { HomeContext } from '../contexts/HomeContext';
 import IODrawer from '../components/IODrawer';

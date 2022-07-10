@@ -1,9 +1,16 @@
+import type { NextPage } from "next";
 import { IHomeActionEnum } from "./constants";
 
 export type User = {
 	username: string;
-	password: String;
+	password: string;
+	tokens: [string];
 }
+
+export interface PrivatePage extends NextPage {
+	private?: boolean;
+}
+
 
 export type FileAdd = {
 	createFile: (name: string) => void;

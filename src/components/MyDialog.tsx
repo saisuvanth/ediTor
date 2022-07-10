@@ -1,5 +1,5 @@
 import { Autocomplete, Dialog, Paper, Stack, TextField } from '@mui/material'
-import React, { FC, useContext, useEffect, useRef, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import { HomeContext } from '../contexts/HomeContext';
 import { IHomeActionEnum, supportedLang } from '../utils/constants'
 import { FileAdd } from '../utils/types';
