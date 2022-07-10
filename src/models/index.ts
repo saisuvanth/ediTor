@@ -1,11 +1,8 @@
 import { connect } from 'mongoose';
+
+console.log(process.env.MONGOURI);
+connect(process.env.MONGOURI as string)
+
 import User from './User';
 
-
-const connectDB = async () => {
-	await connect('mongodb+srv://codeditor:rookie>@cluster0.1t2vy.mongodb.net/?retryWrites=true&w=majority');
-	return { User };
-}
-
-export default connectDB;
-
+export { User };
